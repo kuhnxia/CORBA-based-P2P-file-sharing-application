@@ -1,7 +1,7 @@
 package Client;
 
-import Server.Helper.FileShare;
-import Server.Helper.FileShareHelper;
+import Helper.FileShare;
+import Helper.FileShareHelper;
 
 public class FileShareClient {
 

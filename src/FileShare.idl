@@ -1,6 +1,4 @@
-module Server {
-
-    module Helper {
+module Helper {
 
         interface FileShare {
             // Operations related to shared files
@@ -16,5 +14,3 @@ module Server {
         };
 
     };
-
-};

@@ -1,7 +1,7 @@
 package Server;
 
-import Server.Helper.FileShare;
-import Server.Helper.FileShareHelper;
+import Helper.FileShare;
+import Helper.FileShareHelper;
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;

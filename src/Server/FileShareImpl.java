@@ -1,6 +1,6 @@
 package Server;
 
-import Server.Helper.*;
+import Helper.*;
 
 class FileShareImpl extends FileSharePOA {
 
