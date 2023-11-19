@@ -1,18 +1,19 @@
 package Client;
 
-import Helper.FileShare;
-import Helper.FileShareHelper;
+import Helper.*;
+import org.omg.CORBA.ORB;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
 
 public class FileShareClient {
 
     public static void main(String[] args) {
         try {
-            org.omg.CORBA.ORB orb = org.omg.CORBA.ORB.init(args, null);
-
-            // Replace with the actual IOR obtained from the server
-            String ior = "IOR:...";
-            org.omg.CORBA.Object obj = orb.string_to_object(ior);
-            FileShare fileShare = FileShareHelper.narrow(obj);
+            // create and initialize the ORB
+            ORB orb = ORB.init(args, null);
+            org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+            NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+            FileShare fileShare = FileShareHelper.narrow(ncRef.resolve_str("FILE-SHARE"));
 
             // Test file registration
             fileShare.registerFile("User1", "File1");

@@ -1,13 +1,9 @@
 package Server;
 
-import Helper.FileShare;
-import Helper.FileShareHelper;
-import org.omg.CORBA.ORB;
-import org.omg.CosNaming.NameComponent;
-import org.omg.CosNaming.NamingContextExt;
-import org.omg.CosNaming.NamingContextExtHelper;
-import org.omg.PortableServer.POA;
-import org.omg.PortableServer.POAHelper;
+import Helper.*;
+import org.omg.CORBA.*;
+import org.omg.CosNaming.*;
+import org.omg.PortableServer.*;
 
 public class FileShareServer {
     public static void main(String[] args) {
