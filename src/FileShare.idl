@@ -1,0 +1,20 @@
+module Server {
+
+    module Helper {
+
+        interface FileShare {
+            // Operations related to shared files
+            void registerFile(in string ownerUsername, in string fileName);
+            void removeFile(in string ownerUsername, in string fileName);
+            string searchFiles(in string fileName);
+            string getOwner(in string fileName);
+            boolean downloadFile(in string requesterUsername, in string fileName, in string ownerUsername);
+
+            // Operations related to owners
+            void registerOwner(in string username, in string ipAddress, in long port);
+            void updateOnlineStatus(in string username, in boolean isOnline);
+        };
+
+    };
+
+};
