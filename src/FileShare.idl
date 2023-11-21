@@ -1,16 +1,12 @@
-module Helper {
-
-        interface FileShare {
-            // Operations related to shared files
-            void registerFile(in string ownerUsername, in string fileName);
-            void removeFile(in string ownerUsername, in string fileName);
-            string searchFiles(in string fileName);
-            string getOwner(in string fileName);
-            boolean downloadFile(in string requesterUsername, in string fileName, in string ownerUsername);
-
-            // Operations related to owners
-            void registerOwner(in string username, in string ipAddress, in long port);
-            void updateOnlineStatus(in string username, in boolean isOnline);
-        };
-
+module Server {
+  module CORBA {
+    interface FileShare {
+        string registerFile(in string fileName, in string ipAddress, in long port);
+        string cancelSharing(in string fileName, in string ipAddress, in long port);
+        string findSharedFiles(in string filename);
+        string getSocketAddressById(in long id);
     };
+
+  };
+
+};
