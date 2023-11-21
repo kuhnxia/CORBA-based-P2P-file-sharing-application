@@ -4,9 +4,9 @@ import java.sql.*;
 
 public class DatabaseConnector {
     private static final String URL = "jdbc:mysql://localhost:3306/";
-    private static final String DATABASE_NAME = "p2p_file_sharing_db";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "MyNewPass";
+    private static final String DATABASE_NAME = "p2p_file_sharing_db";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL+DATABASE_NAME, USERNAME, PASSWORD);
