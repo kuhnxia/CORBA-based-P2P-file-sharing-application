@@ -1,6 +1,8 @@
 package Client;
 
-import Helper.*;
+import Server.CORBA.FileShare;
+import Server.CORBA.FileShareHelper;
+
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
@@ -16,21 +18,14 @@ public class FileShareClient {
             FileShare fileShare = FileShareHelper.narrow(ncRef.resolve_str("FILE-SHARE"));
 
             // Test file registration
-            fileShare.registerFile("User1", "File1");
-            fileShare.registerFile("User2", "File2");
+            String message = fileShare.registerFile("User1", "File1", 00);
+            System.out.println(message);
+            message = fileShare.registerFile("User2", "File2", 11);
+            System.out.println(message);
 
             // Test file search
-            String searchResult = fileShare.searchFiles("File1");
-            System.out.println("Search result: " + searchResult);
-
-            // Test file download
-            String owner = fileShare.getOwner("File1");
-            boolean downloadResult = fileShare.downloadFile("Requester", "File1", owner);
-            if (downloadResult) {
-                System.out.println("File downloaded successfully.");
-            } else {
-                System.out.println("File download failed.");
-            }
+            String searchResult = fileShare.findSharedFiles("User1");
+            System.out.println("Search result: \n" + searchResult);
 
         } catch (Exception e) {
             e.printStackTrace();
