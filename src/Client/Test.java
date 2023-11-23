@@ -4,7 +4,7 @@ import Client.Connector.CORBAConnector;
 import Client.Helpers.LocalIPAddressHelper;
 import Client.SocketThreads.SocketServerThread;
 import Client.Helpers.LocalFileHelper;
-import Server.CORBA.FileShare;
+import Client.CORBA.FileShare;
 
 public class Test {
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package Client.Connector;
 
-import Server.CORBA.FileShare;
-import Server.CORBA.FileShareHelper;
+import Client.CORBA.FileShare;
+import Client.CORBA.FileShareHelper;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
