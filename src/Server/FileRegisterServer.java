@@ -19,7 +19,6 @@ public class FileRegisterServer {
         try{
             // Launch the Object Request Broker Daemon (ORBD)
             new Thread(() -> {
-                    // Execute the command
                 try {
                     Runtime.getRuntime().exec("orbd -ORBInitialPort 1050 -ORBInitialHost localhost");
                 } catch (IOException e) {
@@ -27,13 +26,16 @@ public class FileRegisterServer {
                 }
             }).start();
 
+            // Waiting ORBD to launch
+            Thread.sleep(2000);
+
             // Set the ORB properties programmatically
             java.util.Properties props = new java.util.Properties();
             props.put("org.omg.CORBA.ORBInitialPort", "1050");
             props.put("org.omg.CORBA.ORBInitialHost", "localhost");
 
             // create and initialize the ORB with the specified properties
-            ORB orb = ORB.init(new String[]{}, props);
+            ORB orb = ORB.init(args, props);
 
             // get reference to rootpoa & activate the POAManager
             POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
