@@ -1,4 +1,4 @@
-package Server.Connecter;
+package Server.Connector;
 
 import java.sql.*;
 

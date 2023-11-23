@@ -12,11 +12,28 @@ import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
-public class FileShareServer {
+import java.io.IOException;
+
+public class FileRegisterServer {
     public static void main(String[] args) {
         try{
-            // create and initialize the ORB
-            ORB orb = ORB.init(args, null);
+            // Launch the Object Request Broker Daemon (ORBD)
+            new Thread(() -> {
+                    // Execute the command
+                try {
+                    Runtime.getRuntime().exec("orbd -ORBInitialPort 1050 -ORBInitialHost localhost");
+                } catch (IOException e) {
+                    System.err.println("ERROR: " + e);
+                }
+            }).start();
+
+            // Set the ORB properties programmatically
+            java.util.Properties props = new java.util.Properties();
+            props.put("org.omg.CORBA.ORBInitialPort", "1050");
+            props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+
+            // create and initialize the ORB with the specified properties
+            ORB orb = ORB.init(new String[]{}, props);
 
             // get reference to rootpoa & activate the POAManager
             POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
@@ -35,7 +52,7 @@ public class FileShareServer {
             NameComponent path[] = ncRef.to_name( "FILE-SHARE" );
             ncRef.rebind(path, href);
 
-            System.out.println("Server ready and waiting ...");
+            System.out.println("File register Server ready and waiting ...");
 
             // wait for invocations from clients
             orb.run();
@@ -43,7 +60,6 @@ public class FileShareServer {
 
         catch (Exception e) {
             System.err.println("ERROR: " + e);
-            e.printStackTrace(System.out);
         }
 
         System.out.println("Exiting ...");

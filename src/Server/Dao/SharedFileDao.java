@@ -1,6 +1,6 @@
 package Server.Dao;
 import Server.Entity.SharedFile;
-import Server.Connecter.DatabaseConnector;
+import Server.Connector.DatabaseConnector;
 
 import java.sql.*;
 import java.util.ArrayList;
