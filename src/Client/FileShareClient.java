@@ -1,28 +1,40 @@
 package Client;
 
+import Client.CORBA.FileShare;
 import Client.Connector.CORBAConnector;
+import Client.Helpers.LocalFileHelper;
 import Client.Helpers.LocalIPAddressHelper;
 import Client.SocketThreads.SocketServerThread;
-import Client.Helpers.LocalFileHelper;
-import Client.CORBA.FileShare;
 
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Scanner;
 
-public class Test {
+public class FileShareClient {
+
+    // Change the ip address to your corba file sharing register server.
+    private static final String CORBA_SERVER_IP_ADDRESS = "192.168.0.4";
     public static void main(String[] args) {
-        int port = 8080;
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Get this computer's IP address in your local network ...");
         String serverAddress = getServerAddress();
-        System.out.println(serverAddress);
+        System.out.println("You socket server IP address is: " + serverAddress);
+
+        System.out.println("What is your prefer port to start the file sharing socket server?");
+        int port = sc.nextInt();
+        SocketServerThread socketServer = new SocketServerThread(port);
+        socketServer.start();
+
+        System.out.printf("Get the file register server from %s:1050\n", CORBA_SERVER_IP_ADDRESS);
+        FileShare fileShare = CORBAConnector.getFileShareServer(CORBA_SERVER_IP_ADDRESS);
 
         String sourcePath = "/Users/rocky/Desktop/Github/CORBA-based-P2P-file-sharing-application/src/FileShare.idl";
         LocalFileHelper.copyFileToFolder(sourcePath);
 
-        SocketServerThread socketServer = new SocketServerThread(port);
-        socketServer.start();
 
-        FileShare fileShare = CORBAConnector.getFileShareServer(serverAddress);
+
+
 
         // Test file registration
         String message = fileShare.registerFile("User1", "File1", 00);

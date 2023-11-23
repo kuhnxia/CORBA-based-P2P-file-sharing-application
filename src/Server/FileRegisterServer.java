@@ -13,11 +13,14 @@ import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.util.List;
+import java.util.Scanner;
 
 public class FileRegisterServer {
     public static void main(String[] args) {
-        // Show your ip address in the local network.
-        String serverAddress = LocalIPAddressHelper.getServerAddress();
+        System.out.println("Get this computer's IP address in your local network ...");
+        String serverAddress = getServerAddress();
         System.out.println("Register Server IP: " + serverAddress);
 
         try{
@@ -69,5 +72,29 @@ public class FileRegisterServer {
         }
 
         System.out.println("Exiting ...");
+    }
+
+    public static String getServerAddress () {
+        List<InetAddress> inet4Addresses = LocalIPAddressHelper.getLocalIPAddresses();
+
+        if (inet4Addresses.size() == 1){
+            return inet4Addresses.get(0).getHostAddress();
+        } else {
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("You are using not only one network interfaces, such as Ethernet, WiFi, Cellular, VPN.\n" +
+                    "Choose the correct IP that the router assigned to you in your local network: \n");
+            int i = 1;
+            for (InetAddress inet4Address : inet4Addresses) {
+                System.out.printf("Enter %d if you will use local IP: %s\n\n", i, inet4Address.getHostAddress());
+                i++;
+            }
+            System.out.println("If you do not know which IP you will use to interact with other computers in your local network\n"
+                    + "You can try to close Cellular or VPN, and keep only one of Wifi or Ethernet connections,\n"
+                    + "then restart this program manually!\n");
+            System.out.println("Your choice: ");
+            return inet4Addresses.get(sc.nextInt()-1).getHostAddress();
+        }
+
     }
 }
