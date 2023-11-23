@@ -17,7 +17,7 @@ public class Test {
         System.out.println(serverAddress);
 
         String sourcePath = "/Users/rocky/Desktop/Github/CORBA-based-P2P-file-sharing-application/src/FileShare.idl";
-        LocalFileHelper.copyFileToFolder(sourcePath);
+        LocalFileHelper.copyFileToSharedFolder(sourcePath);
 
         SocketServerThread socketServer = new SocketServerThread(port);
         socketServer.start();

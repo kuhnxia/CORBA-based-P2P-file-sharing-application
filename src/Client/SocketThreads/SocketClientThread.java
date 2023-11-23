@@ -33,7 +33,7 @@ public class SocketClientThread extends Thread {
             // Close the connection
             socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error:" + e);
         }
     }
 

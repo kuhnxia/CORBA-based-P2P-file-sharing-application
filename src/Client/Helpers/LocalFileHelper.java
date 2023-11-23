@@ -34,7 +34,7 @@ public class LocalFileHelper {
         return fileName;
     }
 
-    public static void copyFileToFolder(String sourceFilePath) {
+    public static void copyFileToSharedFolder(String sourceFilePath) {
         // Create Path object for the source file
         Path sourcePath = Paths.get(sourceFilePath);
 
@@ -66,5 +66,15 @@ public class LocalFileHelper {
         } catch (IOException e) {
             System.err.println("Error copying the file: " + e.getMessage());
         }
+    }
+
+    public static void deleteFileFromSharedFolder(String fileName) {
+        // Construct the file path
+        String filePath = SHARED_FILES_DIRECTORY + fileName;
+
+        // Create a File object for the file and delete the file.
+        File fileToDelete = new File(filePath);
+        if (fileToDelete.exists()) fileToDelete.delete();
+
     }
 }
