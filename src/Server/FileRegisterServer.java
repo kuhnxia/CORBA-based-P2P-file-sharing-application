@@ -2,6 +2,7 @@ package Server;
 
 import Server.CORBA.FileShare;
 import Server.CORBA.FileShareHelper;
+import Server.Connector.DatabaseConnector;
 import Server.FileShare.FileShareImpl;
 import Server.Helper.LocalIPAddressHelper;
 
@@ -23,6 +24,9 @@ public class FileRegisterServer {
         System.out.println("Get this computer's IP address in your local network ...");
         String serverAddress = getServerAddress();
         System.out.println("Register Server IP: " + serverAddress);
+
+        //Initialize the database if not.
+        DatabaseConnector.initialize();
 
         try{
             // Launch the Object Request Broker Daemon (ORBD)

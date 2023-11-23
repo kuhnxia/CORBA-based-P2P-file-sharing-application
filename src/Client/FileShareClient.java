@@ -27,6 +27,9 @@ public class FileShareClient {
 
         System.out.println("What is your prefer port to start the file sharing socket server?");
         port = sc.nextInt();
+
+       LocalFileHelper.createSharedFileDirectory(socketServerAddress, port);
+
         SocketServerThread socketServer = new SocketServerThread(port);
         socketServer.start();
 
@@ -90,9 +93,7 @@ public class FileShareClient {
         String message = fileShare.cancelSharing(fileName, socketServerAddress, port);
         System.out.println(message);
 
-        // When the same ip with different ports to register the same file more than one time,
-        // if we delete the shared file when cancelling sharing, it will get error.
-        // LocalFileHelper.deleteFileFromSharedFolder(fileName);
+        LocalFileHelper.deleteFileFromSharedFolder(fileName);
     }
 
     private static void searchAndRequestSharedFile() {

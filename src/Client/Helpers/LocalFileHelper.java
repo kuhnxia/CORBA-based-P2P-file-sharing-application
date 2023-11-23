@@ -5,11 +5,19 @@ import java.io.IOException;
 import java.nio.file.*;
 
 public class LocalFileHelper {
-    public static final String SHARED_FILES_DIRECTORY = "shared_files/";
+    private static String sharedFilesDirectory;
+    public static final String SHARED_FILES_DIRECTORY_PART = "shared_files_";
     public static final String RECEIVED_FILES_DIRECTORY = "received_files/";
 
+    public static void createSharedFileDirectory(String socketServerAddress, int port) {
+        sharedFilesDirectory = SHARED_FILES_DIRECTORY_PART
+                + socketServerAddress.replace(".", "_")
+                + "_" + port + "/";
+
+    }
+
     public static File createNewFileForSending(String fileName) {
-        return new File(LocalFileHelper.SHARED_FILES_DIRECTORY + fileName);
+        return new File(sharedFilesDirectory + fileName);
 
     }
 
@@ -42,7 +50,7 @@ public class LocalFileHelper {
         String fileName = sourcePath.getFileName().toString();
 
         // Create Path object for the destination folder
-        Path destinationFolderPath = Paths.get(SHARED_FILES_DIRECTORY);
+        Path destinationFolderPath = Paths.get(sharedFilesDirectory);
 
         // Check if the destination folder exists, and create it if not
         if (!Files.exists(destinationFolderPath)) {
@@ -75,11 +83,15 @@ public class LocalFileHelper {
 
     public static void deleteFileFromSharedFolder(String fileName) {
         // Construct the file path
-        String filePath = SHARED_FILES_DIRECTORY + fileName;
+        String filePath = sharedFilesDirectory + fileName;
 
         // Create a File object for the file and delete the file.
         File fileToDelete = new File(filePath);
-        if (fileToDelete.exists()) fileToDelete.delete();
+        if (fileToDelete.exists()) {
+            fileToDelete.delete();
+            System.out.println("File deleted from the shared folder");
+        }
 
     }
+
 }
