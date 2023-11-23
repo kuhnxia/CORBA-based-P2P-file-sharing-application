@@ -2,8 +2,8 @@ package Server;
 
 import Server.CORBA.FileShare;
 import Server.CORBA.FileShareHelper;
-
 import Server.FileShare.FileShareImpl;
+import Server.Helper.LocalIPAddressHelper;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NameComponent;
@@ -16,6 +16,10 @@ import java.io.IOException;
 
 public class FileRegisterServer {
     public static void main(String[] args) {
+        // Show your ip address in the local network.
+        String serverAddress = LocalIPAddressHelper.getServerAddress();
+        System.out.println("Register Server IP: " + serverAddress);
+
         try{
             // Launch the Object Request Broker Daemon (ORBD)
             new Thread(() -> {
@@ -26,7 +30,7 @@ public class FileRegisterServer {
                 }
             }).start();
 
-            // Waiting ORBD to launch
+            System.out.println("Waiting ORBD to launch...");
             Thread.sleep(2000);
 
             // Set the ORB properties programmatically

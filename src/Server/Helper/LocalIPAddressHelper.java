@@ -1,4 +1,4 @@
-package Client.Helpers;
+package Server.Helper;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
