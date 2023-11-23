@@ -51,7 +51,7 @@ public class FileShareImpl extends FileSharePOA {
         // Find all shared files with the target filename.
         for (SharedFile sharedFile : sharedFiles) {
             if (sharedFile.getFilename().equals(filename)) {
-                filesInfo += "file id: " + sharedFile.getId() + "\n";
+                filesInfo += sharedFile.getId() + " ";
             }
         }
         return filesInfo;

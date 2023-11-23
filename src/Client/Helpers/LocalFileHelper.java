@@ -34,7 +34,7 @@ public class LocalFileHelper {
         return fileName;
     }
 
-    public static void copyFileToSharedFolder(String sourceFilePath) {
+    public static boolean copyFileToSharedFolder(String sourceFilePath) {
         // Create Path object for the source file
         Path sourcePath = Paths.get(sourceFilePath);
 
@@ -48,24 +48,29 @@ public class LocalFileHelper {
         if (!Files.exists(destinationFolderPath)) {
             try {
                 Files.createDirectories(destinationFolderPath);
-                System.out.println("Destination folder created: " + destinationFolderPath);
+                System.out.println("Shared folder created: " + destinationFolderPath);
             } catch (IOException e) {
                 System.err.println("Error creating destination folder: " + e.getMessage());
-                return; // Stop execution if folder creation fails
+                return false; // Stop execution if folder creation fails
             }
         }
 
-        try {
-            // Create Path object for the destination file
-            Path destinationFilePath = destinationFolderPath.resolve(fileName);
+        // Create Path object for the destination file
+        Path destinationFilePath = destinationFolderPath.resolve(fileName);
 
+        // Check if the destination file already exists
+        if (Files.exists(destinationFilePath)) return true;
+
+        try {
             // Copy the file to the destination folder
             Files.copy(sourcePath, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
 
             System.out.println("File copied successfully to: " + destinationFilePath);
+            return true;
         } catch (IOException e) {
             System.err.println("Error copying the file: " + e.getMessage());
         }
+        return false;
     }
 
     public static void deleteFileFromSharedFolder(String fileName) {

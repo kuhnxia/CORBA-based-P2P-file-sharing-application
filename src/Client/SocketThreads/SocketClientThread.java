@@ -29,6 +29,7 @@ public class SocketClientThread extends Thread {
 
             // Receive the file from the server
             receiveFile(fileName, reader);
+            System.out.println("File received successfully!");
 
             // Close the connection
             socket.close();

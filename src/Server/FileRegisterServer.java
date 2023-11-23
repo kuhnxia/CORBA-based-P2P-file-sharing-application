@@ -14,6 +14,7 @@ import org.omg.PortableServer.POAHelper;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,7 +35,7 @@ public class FileRegisterServer {
             }).start();
 
             System.out.println("Waiting ORBD to launch...");
-            Thread.sleep(2000);
+            Thread.sleep(1000);
 
             // Set the ORB properties programmatically
             java.util.Properties props = new java.util.Properties();
@@ -92,8 +93,18 @@ public class FileRegisterServer {
             System.out.println("If you do not know which IP you will use to interact with other computers in your local network\n"
                     + "You can try to close Cellular or VPN, and keep only one of Wifi or Ethernet connections,\n"
                     + "then restart this program manually!\n");
-            System.out.println("Your choice: ");
-            return inet4Addresses.get(sc.nextInt()-1).getHostAddress();
+
+            int choice = 0;
+            while (choice <= 0 || choice >= i) {
+                System.out.println("Please enter a right choice: ");
+                try {
+                    choice = sc.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a valid integer.");
+                    sc.next(); // consume the invalid input to prevent an infinite loop
+                }
+            }
+            return inet4Addresses.get(choice-1).getHostAddress();
         }
 
     }
