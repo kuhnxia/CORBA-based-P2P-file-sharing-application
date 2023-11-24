@@ -24,12 +24,17 @@ public class SocketClientThread extends Thread {
             DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
 
             // Request a file from the server
-            System.out.println("Requesting file: " + fileName);
+            System.out.printf("Requesting file: %s from %s:%d\n", fileName, ip, port);
             writer.writeUTF(fileName);
 
             // Receive the file from the server
-            receiveFile(fileName, reader);
-            System.out.println("File received successfully!");
+            Boolean received = receiveFile(fileName, reader);
+            if (received) {
+                System.out.println("File received successfully!");
+            } else {
+                System.out.println("File not found!");
+            }
+
 
             // Close the connection
             socket.close();
@@ -38,8 +43,9 @@ public class SocketClientThread extends Thread {
         }
     }
 
-    private void receiveFile(String fileName, DataInputStream reader) throws IOException {
+    private boolean receiveFile(String fileName, DataInputStream reader) throws IOException {
         long length = reader.readLong();
+        Boolean received = false;
 
         if (length != -1) {
             File file = LocalFileHelper.createNewFileForReceiving(fileName);
@@ -53,8 +59,8 @@ public class SocketClientThread extends Thread {
                     length -= bytesRead;
                 }
             }
-        } else {
-            System.out.println("File not found");
+            received = true;
         }
+        return received;
     }
 }

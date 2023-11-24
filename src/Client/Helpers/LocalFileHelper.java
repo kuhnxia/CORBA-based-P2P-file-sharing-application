@@ -11,9 +11,7 @@ public class LocalFileHelper {
 
     public static void createSharedFileDirectory(String socketServerAddress, int port) {
         //Get the shared file directory;
-        sharedFilesDirectory = SHARED_FILES_DIRECTORY_PART + File.separator
-                + socketServerAddress.replace(".", "_")
-                + "_" + port;
+        sharedFilesDirectory = getSharedFilesDirectory(socketServerAddress, port);
 
         // Create Path object for the destination folder
         Path sharedFolderPath = Paths.get(sharedFilesDirectory);
@@ -30,8 +28,22 @@ public class LocalFileHelper {
 
     }
 
-    public static File createNewFileForSending(String fileName) {
-        return new File(sharedFilesDirectory + File.separator + fileName);
+    public static File createNewFileForSending(String fileName, String serverAddress, int port) {
+        /*
+        One socket server can map to more than one server address!
+
+        In case, there is more than one available network interface,
+        and the socket server is created with the same port more than one time,
+        and each time, this client may choose a different IP (interface)
+        to interact with other clients in its identical local network.
+
+        This method can handle the file share request from a local network
+        other than the local network where this client is registering, cancelling, searching and sharing files
+        if the port is the same.
+        */
+
+        String alterSharedFilesDirectory = getSharedFilesDirectory(serverAddress, port);
+        return new File(alterSharedFilesDirectory + File.separator + fileName);
 
     }
 
@@ -95,6 +107,12 @@ public class LocalFileHelper {
             System.out.println("File deleted from the shared folder");
         }
 
+    }
+
+    private static String getSharedFilesDirectory(String socketServerAddress, int port) {
+        return SHARED_FILES_DIRECTORY_PART + File.separator
+                + socketServerAddress.replace(".", "_")
+                + "_" + port;
     }
 
 }

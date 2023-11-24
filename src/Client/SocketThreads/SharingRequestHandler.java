@@ -8,9 +8,13 @@ import java.net.SocketAddress;
 
 class SharingRequestHandler implements Runnable {
     private Socket clientSocket;
+    private String serverIP;
+    private int serverPort;
 
     public SharingRequestHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
+        this.serverIP = clientSocket.getLocalAddress().getHostAddress();
+        this.serverPort = clientSocket.getLocalPort();
     }
 
     @Override
@@ -21,12 +25,8 @@ class SharingRequestHandler implements Runnable {
 
             // Read the requested file name from the client
             String fileName = reader.readUTF();
-            /*
-            String socketAddress = clientSocket.getLocalSocketAddress().toString();
-            int port = clientSocket.getLocalPort();
-            System.out.printf("Client %d requested file: %s\n", port, fileName);
-            */
-            System.out.printf("A client requested file: %s\n", fileName);
+            System.out.printf("A client requested file: %s by %s:%d\n",
+                    fileName, serverIP, serverPort);
 
             // Send the requested file to the client
             sendFile(fileName, writer);
@@ -39,7 +39,8 @@ class SharingRequestHandler implements Runnable {
     }
 
     private void sendFile(String fileName, DataOutputStream writer) throws IOException {
-        File file = LocalFileHelper.createNewFileForSending(fileName);
+        File file = LocalFileHelper.createNewFileForSending(fileName,
+                serverIP, serverPort);
 
         if (file.exists()) {
             long length = file.length();

@@ -13,7 +13,7 @@ import java.util.*;
 public class FileShareClient {
 
     // Change it to the actual IP address of your CORBA file-sharing register server.
-    private static final String CORBA_SERVER_IP_ADDRESS = "192.168.0.2";
+    private static final String CORBA_SERVER_IP_ADDRESS = "198.18.0.1";
     private static String socketServerAddress;
     private static int port;
     private static FileShare fileShare;
@@ -135,7 +135,7 @@ public class FileShareClient {
                         socketClient.start();
 
                         // Waiting the socket client get response back.
-                        Thread.sleep(200);
+                        Thread.sleep(2000);
                     }
 
 
