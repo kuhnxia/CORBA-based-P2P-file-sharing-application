@@ -114,6 +114,30 @@ public class LocalFileHelper {
 
     }
 
+    public static void listSharedFilesInFolder() {
+        File folder = new File(sharedFilesDirectory);
+
+        // Check if the provided path points to a directory
+        if (!folder.isDirectory()) {
+            System.out.println("Not a valid directory path.");
+            return;
+        }
+        // List all files in the directory
+        File[] files = folder.listFiles();
+
+        // Check if there are any files in the directory
+        if (files != null) {
+            // Print the names of all files in the directory
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println(file.getName());
+                }
+            }
+        } else {
+            System.out.println("No shared file in the folder");
+        }
+    }
+
     private static String getSharedFilesDirectory(String socketServerAddress, int port) {
         // Get the user's home directory
         String userHome = System.getProperty("user.home");
