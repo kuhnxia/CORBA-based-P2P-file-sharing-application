@@ -6,23 +6,37 @@ import java.nio.file.*;
 
 public class LocalFileHelper {
     private static String sharedFilesDirectory;
-    public static final String SHARED_FILES_DIRECTORY_PART = "shared_files_";
-    public static final String RECEIVED_FILES_DIRECTORY = "received_files/";
+    public static final String SHARED_FILES_DIRECTORY_PART = "shared_files";
+    public static final String RECEIVED_FILES_DIRECTORY = "received_files";
 
     public static void createSharedFileDirectory(String socketServerAddress, int port) {
-        sharedFilesDirectory = SHARED_FILES_DIRECTORY_PART
+        //Get the shared file directory;
+        sharedFilesDirectory = SHARED_FILES_DIRECTORY_PART + File.separator
                 + socketServerAddress.replace(".", "_")
-                + "_" + port + "/";
+                + "_" + port;
+
+        // Create Path object for the destination folder
+        Path sharedFolderPath = Paths.get(sharedFilesDirectory);
+
+        // Check if the destination folder exists, and create it if not
+        if (!Files.exists(sharedFolderPath)) {
+            try {
+                Files.createDirectories(sharedFolderPath);
+                System.out.println("Shared folder created: " + sharedFolderPath);
+            } catch (IOException e) {
+                System.err.println("Error creating destination folder: " + e.getMessage());
+            }
+        }
 
     }
 
     public static File createNewFileForSending(String fileName) {
-        return new File(sharedFilesDirectory + fileName);
+        return new File(sharedFilesDirectory + File.separator + fileName);
 
     }
 
     public static File createNewFileForReceiving(String fileName) {
-        File file = new File(RECEIVED_FILES_DIRECTORY + fileName);
+        File file = new File(RECEIVED_FILES_DIRECTORY + File.separator + fileName);
 
         // Ensure that the directories leading to the file exist
         File parentDirectory = file.getParentFile();
@@ -50,21 +64,10 @@ public class LocalFileHelper {
         String fileName = sourcePath.getFileName().toString();
 
         // Create Path object for the destination folder
-        Path destinationFolderPath = Paths.get(sharedFilesDirectory);
-
-        // Check if the destination folder exists, and create it if not
-        if (!Files.exists(destinationFolderPath)) {
-            try {
-                Files.createDirectories(destinationFolderPath);
-                System.out.println("Shared folder created: " + destinationFolderPath);
-            } catch (IOException e) {
-                System.err.println("Error creating destination folder: " + e.getMessage());
-                return false; // Stop execution if folder creation fails
-            }
-        }
+        Path sharedFolderPath = Paths.get(sharedFilesDirectory);
 
         // Create Path object for the destination file
-        Path destinationFilePath = destinationFolderPath.resolve(fileName);
+        Path destinationFilePath = sharedFolderPath.resolve(fileName);
 
         // Check if the destination file already exists
         if (Files.exists(destinationFilePath)) return true;
@@ -83,7 +86,7 @@ public class LocalFileHelper {
 
     public static void deleteFileFromSharedFolder(String fileName) {
         // Construct the file path
-        String filePath = sharedFilesDirectory + fileName;
+        String filePath = sharedFilesDirectory + File.separator + fileName;
 
         // Create a File object for the file and delete the file.
         File fileToDelete = new File(filePath);
