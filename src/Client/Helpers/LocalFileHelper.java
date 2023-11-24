@@ -6,8 +6,10 @@ import java.nio.file.*;
 
 public class LocalFileHelper {
     private static String sharedFilesDirectory;
+    private static String receivedFilesDirectory;
+    private static final String APPLICATION_CACHE_DIRECTORY = "CORBA-based-P2P-file-sharing-application";
     public static final String SHARED_FILES_DIRECTORY_PART = "shared_files";
-    public static final String RECEIVED_FILES_DIRECTORY = "received_files";
+    public static final String RECEIVED_FILES_DIRECTORY_PART = "received_files";
 
     public static void createSharedFileDirectory(String socketServerAddress, int port) {
         //Get the shared file directory;
@@ -48,7 +50,9 @@ public class LocalFileHelper {
     }
 
     public static File createNewFileForReceiving(String fileName) {
-        File file = new File(RECEIVED_FILES_DIRECTORY + File.separator + fileName);
+
+        receivedFilesDirectory = getReceivedFilesDirectory();
+        File file = new File(receivedFilesDirectory + File.separator + fileName);
 
         // Ensure that the directories leading to the file exist
         File parentDirectory = file.getParentFile();
@@ -58,6 +62,7 @@ public class LocalFileHelper {
 
         return file;
     }
+
     public static String getFilenameFromPath(String sourceFilePath) {
         // Create Path object for the source file
         Path sourcePath = Paths.get(sourceFilePath);
@@ -110,9 +115,23 @@ public class LocalFileHelper {
     }
 
     private static String getSharedFilesDirectory(String socketServerAddress, int port) {
-        return SHARED_FILES_DIRECTORY_PART + File.separator
+        // Get the user's home directory
+        String userHome = System.getProperty("user.home");
+        
+        return userHome + File.separator
+                + APPLICATION_CACHE_DIRECTORY + File.separator
+                + SHARED_FILES_DIRECTORY_PART + File.separator
                 + socketServerAddress.replace(".", "_")
                 + "_" + port;
+    }
+
+    private static String getReceivedFilesDirectory() {
+        // Get the user's home directory
+        String userHome = System.getProperty("user.home");
+
+        return userHome + File.separator
+                + APPLICATION_CACHE_DIRECTORY + File.separator
+                + RECEIVED_FILES_DIRECTORY_PART;
     }
 
 }
