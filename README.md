@@ -1,6 +1,42 @@
 # CORBA-based-P2P-file-sharing-application
 
-## Setup
+- This project includes two programs.
+- One for CORBA File Share Register Server
+- Another for CORBA File Share Client with Sockets.
+
+## Quick Start
+
+### Start FileRegisterServer on a computer.
+
+- Waiting Maven auto-building completed.
+- Choose Java 8 as the Project JDK.
+- Installed MySQL and Workbench.
+- Prepared a MySQL connection with hostname, port, username, and password.
+- Place the values of the following three constants in [DatabaseConnector.java](src/main/java/Server/Connector/DatabaseConnector.java) to your MySQL connection setting.
+```
+private static final String URL = "jdbc:mysql://localhost:3306/";
+private static final String USERNAME = "root";
+private static final String PASSWORD = "MyNewPass";
+```
+- Then Run [FileRegisterServer.java](src/main/java/Server/FileRegisterServer.java)
+- Note the server IP of the FileRegisterServer.
+
+### Start one or more FileShareClient on the same or other computers at the same local networks.
+
+- Waiting Maven auto-building completed.
+- Choose Java 8 as the Project JDK.
+- Place the value of the constant in [FileShareClient.java](src/main/java/Client/FileShareClient.java) to your real server IP.
+```
+private static final String CORBA_SERVER_IP_ADDRESS = "198.18.0.1";
+```
+- Then run [FileShareClient.java](src/main/java/Client/FileShareClient.java).
+- If you are facing problems, please read [Setup Details](#setup-details) for solutions.
+
+## Setup Details
+
+### A Maven
+- This project is using Maven for Dependency management!
+- See dependencies in `pom.xml`
 
 ### A. JDK
 
@@ -27,12 +63,7 @@
 
 ### 3. Change the values of the following three constants to your local setting.
 
-From `src/Server/Connecter/DatabaseConnector.java`
-```java
-private static final String URL = "jdbc:mysql://localhost:3306/";
-private static final String USERNAME = "root";
-private static final String PASSWORD = "MyNewPass";
-```
+
 
 ### C. CORBA
 
