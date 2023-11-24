@@ -13,7 +13,7 @@ import java.util.*;
 public class FileShareClient {
 
     // Change it to the actual IP address of your CORBA file-sharing register server.
-    private static final String CORBA_SERVER_IP_ADDRESS = "192.168.0.2";
+    private static final String CORBA_SERVER_IP_ADDRESS = "198.18.0.1";
     private static String socketServerAddress;
     private static int port;
     private static FileShare fileShare;
@@ -74,11 +74,12 @@ public class FileShareClient {
     private static void registerFile() {
         try {
             System.out.println("Please enter the absolute path of your file ready to share:");
+            System.out.println("The path should not contain any space, a wrong example: My folder\\my file.txt");
             String sourcePath = sc.next();
 
             String fileName = LocalFileHelper.getFilenameFromPath(sourcePath);
             Boolean copied = LocalFileHelper.copyFileToSharedFolder(sourcePath);
-            Thread.sleep(100);
+            Thread.sleep(1000);
             if (copied){
                 String message = fileShare.registerFile(fileName, socketServerAddress, port);
                 System.out.println(message);
@@ -93,6 +94,9 @@ public class FileShareClient {
     }
 
     private static void cancelSharing() {
+        System.out.println("Below is the shared file list: ");
+        LocalFileHelper.listSharedFilesInFolder();
+
         System.out.println("Please enter the file name you want to cancel sharing:");
         String fileName = sc.next();
 
@@ -134,8 +138,8 @@ public class FileShareClient {
                         SocketClientThread socketClient = new SocketClientThread(fileName, clientIP, clientPort);
                         socketClient.start();
 
-                        // Waiting the socket client get response back.
-                        Thread.sleep(200);
+                        //Waiting the socket ends until 10 seconds later.
+                        socketClient.join(10000);
                     }
 
 

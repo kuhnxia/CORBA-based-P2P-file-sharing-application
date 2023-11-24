@@ -3,7 +3,9 @@ package Client.SocketThreads;
 import Client.Helpers.LocalFileHelper;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 public class SocketClientThread extends Thread {
     private String fileName;
@@ -19,27 +21,40 @@ public class SocketClientThread extends Thread {
     @Override
     public void run() {
         try {
-            Socket socket = new Socket(ip, port);
+            Socket socket = new Socket();
+
+            SocketAddress socketAddress = new InetSocketAddress(ip, port);
+            //In case, spend too much time to connect an invalid socket address.
+            int timeout = 1000;
+            socket.connect(socketAddress, timeout);
+            System.out.println("Socket connection successful!");
+
             DataInputStream reader = new DataInputStream(socket.getInputStream());
             DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
 
             // Request a file from the server
-            System.out.println("Requesting file: " + fileName);
+            System.out.printf("Requesting file: %s from %s:%d\n", fileName, ip, port);
             writer.writeUTF(fileName);
 
             // Receive the file from the server
-            receiveFile(fileName, reader);
-            System.out.println("File received successfully!");
+            Boolean received = receiveFile(fileName, reader);
+            if (received) {
+                System.out.println("File received successfully!");
+            } else {
+                System.out.println("File not found!");
+            }
+
 
             // Close the connection
             socket.close();
         } catch (IOException e) {
-            System.out.println("Error:" + e);
+            System.out.println("Error:" + e.getMessage());
         }
     }
 
-    private void receiveFile(String fileName, DataInputStream reader) throws IOException {
+    private boolean receiveFile(String fileName, DataInputStream reader) throws IOException {
         long length = reader.readLong();
+        Boolean received = false;
 
         if (length != -1) {
             File file = LocalFileHelper.createNewFileForReceiving(fileName);
@@ -53,8 +68,8 @@ public class SocketClientThread extends Thread {
                     length -= bytesRead;
                 }
             }
-        } else {
-            System.out.println("File not found");
+            received = true;
         }
+        return received;
     }
 }
