@@ -3,7 +3,9 @@ package Client.SocketThreads;
 import Client.Helpers.LocalFileHelper;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 public class SocketClientThread extends Thread {
     private String fileName;
@@ -19,7 +21,14 @@ public class SocketClientThread extends Thread {
     @Override
     public void run() {
         try {
-            Socket socket = new Socket(ip, port);
+            Socket socket = new Socket();
+
+            SocketAddress socketAddress = new InetSocketAddress(ip, port);
+            //In case, spend too much time to connect an invalid socket address.
+            int timeout = 1000;
+            socket.connect(socketAddress, timeout);
+            System.out.println("Socket connection successful!");
+
             DataInputStream reader = new DataInputStream(socket.getInputStream());
             DataOutputStream writer = new DataOutputStream(socket.getOutputStream());
 
@@ -39,7 +48,7 @@ public class SocketClientThread extends Thread {
             // Close the connection
             socket.close();
         } catch (IOException e) {
-            System.out.println("Error:" + e);
+            System.out.println("Error:" + e.getMessage());
         }
     }
 
