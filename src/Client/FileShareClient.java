@@ -13,7 +13,7 @@ import java.util.*;
 public class FileShareClient {
 
     // Change it to the actual IP address of your CORBA file-sharing register server.
-    private static final String CORBA_SERVER_IP_ADDRESS = "192.168.0.4";
+    private static final String CORBA_SERVER_IP_ADDRESS = "192.168.0.2";
     private static String socketServerAddress;
     private static int port;
     private static FileShare fileShare;
@@ -72,17 +72,23 @@ public class FileShareClient {
     }
 
     private static void registerFile() {
-        System.out.println("Please enter the absolute path of your file ready to share:");
-        String sourcePath = sc.next();
+        try {
+            System.out.println("Please enter the absolute path of your file ready to share:");
+            String sourcePath = sc.next();
 
-        String fileName = LocalFileHelper.getFilenameFromPath(sourcePath);
-        Boolean copied = LocalFileHelper.copyFileToSharedFolder(sourcePath);
-        if (copied){
-            String message = fileShare.registerFile(fileName, socketServerAddress, port);
-            System.out.println(message);
-        } else {
-            System.out.println("It is not a valid file path");
+            String fileName = LocalFileHelper.getFilenameFromPath(sourcePath);
+            Boolean copied = LocalFileHelper.copyFileToSharedFolder(sourcePath);
+            Thread.sleep(100);
+            if (copied){
+                String message = fileShare.registerFile(fileName, socketServerAddress, port);
+                System.out.println(message);
+            } else {
+                System.out.println("It is not a valid file path");
+            }
+        } catch (InterruptedException e){
+            System.out.println("Error: " + e.getMessage());
         }
+
 
     }
 
