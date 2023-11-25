@@ -126,7 +126,7 @@ public class LocalFileHelper {
         File[] files = folder.listFiles();
 
         // Check if there are any files in the directory
-        if (files != null) {
+        if (files.length > 0) {
             // Print the names of all files in the directory
             for (File file : files) {
                 if (file.isFile()) {

@@ -72,91 +72,108 @@ public class FileShareClient {
     }
 
     private static void registerFile() {
-        try {
-            System.out.println("Please enter the absolute path of your file ready to share:");
-            System.out.println("The path should not contain any space, a wrong example: My folder\\my file.txt");
-            String sourcePath = sc.next();
+        while (true) {
+            try {
+                System.out.println("Please enter the absolute path of your file ready to share:");
+                System.out.println("The path should not contain any space, a wrong example: My folder\\my file.txt");
+                System.out.println("Enter 0 to go back!");
+                String sourcePath = sc.next();
 
-            String fileName = LocalFileHelper.getFilenameFromPath(sourcePath);
-            Boolean copied = LocalFileHelper.copyFileToSharedFolder(sourcePath);
-            Thread.sleep(1000);
-            if (copied){
-                String message = fileShare.registerFile(fileName, socketServerAddress, port);
-                System.out.println(message);
-            } else {
-                System.out.println("It is not a valid file path");
+                if (sourcePath.equals("0")) break;
+
+                String fileName = LocalFileHelper.getFilenameFromPath(sourcePath);
+                Boolean copied = LocalFileHelper.copyFileToSharedFolder(sourcePath);
+                Thread.sleep(1000);
+                if (copied){
+                    String message = fileShare.registerFile(fileName, socketServerAddress, port);
+                    System.out.println(message);
+                } else {
+                    System.out.println("It is not a valid file path");
+                }
+            } catch (InterruptedException e){
+                System.out.println("Error: " + e.getMessage());
             }
-        } catch (InterruptedException e){
-            System.out.println("Error: " + e.getMessage());
         }
-
 
     }
 
     private static void cancelSharing() {
-        System.out.println("Below is the shared file list: ");
-        LocalFileHelper.listSharedFilesInFolder();
+        while (true) {
+            System.out.println("Below is the shared file list: ");
+            LocalFileHelper.listSharedFilesInFolder();
 
-        System.out.println("Please enter the file name you want to cancel sharing:");
-        String fileName = sc.next();
+            System.out.println("Please enter the file name you want to cancel sharing:");
+            System.out.println("Enter 0 to go back!");
+            String fileName = sc.next();
 
-        String message = fileShare.cancelSharing(fileName, socketServerAddress, port);
-        System.out.println(message);
+            if (fileName.equals("0"))break;
 
-        LocalFileHelper.deleteFileFromSharedFolder(fileName);
-    }
+            String message = fileShare.cancelSharing(fileName, socketServerAddress, port);
+            System.out.println(message);
 
-    private static void searchAndRequestSharedFile() {
-        System.out.println("Please enter the file name you want to search:");
-        String fileName = sc.next();
-
-        String searchResult = fileShare.findSharedFiles(fileName);
-        if (!searchResult.equals("")){
-            System.out.printf("\nList all available file ids with the same target name %s: \n", fileName);
-
-            String[] stringIds = searchResult.split(" ");
-            List<Integer> fileIds = new ArrayList<>();
-            for (String id : stringIds){
-                System.out.println("File id: " + id);
-                fileIds.add(Integer.parseInt(id));
-            }
-
-            while (true) {
-                try {
-                    System.out.println("\nPlease enter the correct id of the file you want to request for sharing!");
-                    System.out.println("Enter 0 to go back!");
-                    int fileId = sc.nextInt();
-                    if (fileId == 0) break;
-
-                    if (fileIds.contains(fileId)) {
-                        // Get client information
-                        String[] socketAddress = fileShare.getSocketAddressById(fileId).split(":");
-                        String clientIP =socketAddress[0];
-                        int clientPort = Integer.parseInt(socketAddress[1]);
-
-                        // Request and send the file.
-                        SocketClientThread socketClient = new SocketClientThread(fileName, clientIP, clientPort);
-                        socketClient.start();
-
-                        //Waiting the socket ends until 10 seconds later.
-                        socketClient.join(10000);
-                    }
-
-
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a valid integer.");
-                    sc.next(); // consume the invalid input to prevent an infinite loop
-                } catch (InterruptedException e) {
-                    System.out.println("Error: " + e);
-                }
-
-            }
-
-        } else {
-            System.out.println("No match result.");
+            LocalFileHelper.deleteFileFromSharedFolder(fileName);
         }
 
     }
+
+    private static void searchAndRequestSharedFile() {
+        while (true) {
+            System.out.println("Please enter the file name you want to search:");
+            System.out.println("Enter 0 to go back!");
+            String fileName = sc.next();
+            if (fileName.equals("0")) break;
+
+            String searchResult = fileShare.findSharedFiles(fileName);
+            if (!searchResult.equals("")){
+                System.out.printf("\nList all available file ids with the same target name %s: \n", fileName);
+
+                String[] stringIds = searchResult.split(" ");
+                List<Integer> fileIds = new ArrayList<>();
+                for (String id : stringIds){
+                    System.out.println("File id: " + id);
+                    fileIds.add(Integer.parseInt(id));
+                }
+
+                requestSharedFile(fileIds, fileName);
+
+            } else {
+                System.out.println("No match result.");
+            }
+        }
+    }
+
+    private static void requestSharedFile(List<Integer> fileIds, String fileName) {
+        while (true) {
+            try {
+                System.out.println("\nPlease enter the correct id of the file you want to request for sharing!");
+                System.out.println("Enter 0 to go back!");
+                int fileId = sc.nextInt();
+                if (fileId == 0) break;
+
+                if (fileIds.contains(fileId)) {
+                    // Get client information
+                    String[] socketAddress = fileShare.getSocketAddressById(fileId).split(":");
+                    String clientIP =socketAddress[0];
+                    int clientPort = Integer.parseInt(socketAddress[1]);
+
+                    // Request and send the file.
+                    SocketClientThread socketClient = new SocketClientThread(fileName, clientIP, clientPort);
+                    socketClient.start();
+
+                    //Waiting the socket ends until 10 seconds later.
+                    socketClient.join(10000);
+                }
+
+
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid integer.");
+                sc.next(); // consume the invalid input to prevent an infinite loop
+            } catch (InterruptedException e) {
+                System.out.println("Error: " + e);
+            }
+        }
+    }
+
     private static String getSocketServerAddress() {
         List<InetAddress> inet4Addresses = LocalIPAddressHelper.getLocalIPAddresses();
 
