@@ -145,6 +145,7 @@ public class FileShareClient {
     private static void requestSharedFile(List<Integer> fileIds, String fileName) {
         while (true) {
             try {
+                System.out.printf("\nYour working socket server address is %s:%d", socketServerAddress, port);
                 System.out.println("\nPlease enter the correct id of the file you want to request for sharing!");
                 System.out.println("Enter 0 to go back!");
                 int fileId = sc.nextInt();
