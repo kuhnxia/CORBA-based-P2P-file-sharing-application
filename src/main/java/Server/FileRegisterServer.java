@@ -19,7 +19,16 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The FileRegisterServer class represents the server that registers file-sharing services
+ * using CORBA in the P2P file-sharing system.
+ */
 public class FileRegisterServer {
+    /**
+     * The main method to start the File Register Server.
+     *
+     * @param args The command-line arguments.
+     */
     public static void main(String[] args) {
         System.out.println("Get this computer's IP address in your local network ...");
         String serverAddress = getServerAddress();
@@ -79,6 +88,11 @@ public class FileRegisterServer {
         System.out.println("Exiting ...");
     }
 
+    /**
+     * Retrieves the server's IP address from available network interfaces.
+     *
+     * @return The IP address of the server.
+     */
     public static String getServerAddress () {
         List<InetAddress> inet4Addresses = LocalIPAddressHelper.getLocalIPAddresses();
 

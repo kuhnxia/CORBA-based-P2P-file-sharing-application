@@ -4,19 +4,29 @@ import Client.Helpers.LocalFileHelper;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketAddress;
 
+/**
+ * The SharingRequestHandler class represents a runnable thread that handles sharing requests from clients.
+ */
 class SharingRequestHandler implements Runnable {
     private Socket clientSocket;
     private String serverIP;
     private int serverPort;
 
+    /**
+     * Constructs a new SharingRequestHandler with the specified client socket.
+     *
+     * @param clientSocket The client socket for handling sharing requests.
+     */
     public SharingRequestHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.serverIP = clientSocket.getLocalAddress().getHostAddress();
         this.serverPort = clientSocket.getLocalPort();
     }
 
+    /**
+     * Runs the sharing request handler thread, processing file requests from clients.
+     */
     @Override
     public void run() {
         try {
@@ -38,6 +48,13 @@ class SharingRequestHandler implements Runnable {
         }
     }
 
+    /**
+     * Sends the requested file to the client.
+     *
+     * @param fileName The name of the requested file.
+     * @param writer   The DataOutputStream for writing to the client.
+     * @throws IOException If an I/O error occurs while sending the file.
+     */
     private void sendFile(String fileName, DataOutputStream writer) throws IOException {
         File file = LocalFileHelper.createNewFileForSending(fileName,
                 serverIP, serverPort);

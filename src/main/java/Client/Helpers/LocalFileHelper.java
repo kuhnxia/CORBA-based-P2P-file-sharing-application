@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 
+/**
+ * The LocalFileHelper class provides methods for managing local files, including file creation,
+ * copying, deletion, and listing within a shared folder structure.
+ */
 public class LocalFileHelper {
     private static String sharedFilesDirectory;
     private static String receivedFilesDirectory;
@@ -11,6 +15,12 @@ public class LocalFileHelper {
     public static final String SHARED_FILES_DIRECTORY_PART = "shared_files";
     public static final String RECEIVED_FILES_DIRECTORY_PART = "received_files";
 
+    /**
+     * Creates the shared file directory based on the provided socket server address and port.
+     *
+     * @param socketServerAddress The socket server address.
+     * @param port                The port number.
+     */
     public static void createSharedFileDirectory(String socketServerAddress, int port) {
         //Get the shared file directory;
         sharedFilesDirectory = getSharedFilesDirectory(socketServerAddress, port);
@@ -30,6 +40,14 @@ public class LocalFileHelper {
 
     }
 
+    /**
+     * Creates a new file for sending based on the file name, server address, and port.
+     *
+     * @param fileName      The name of the file.
+     * @param serverAddress The server address.
+     * @param port          The port number.
+     * @return A File object representing the new file for sending.
+     */
     public static File createNewFileForSending(String fileName, String serverAddress, int port) {
         /*
         One socket server can map to more than one server address!
@@ -49,6 +67,12 @@ public class LocalFileHelper {
 
     }
 
+    /**
+     * Creates a new file for receiving based on the file name.
+     *
+     * @param fileName The name of the file.
+     * @return A File object representing the new file for receiving.
+     */
     public static File createNewFileForReceiving(String fileName) {
 
         receivedFilesDirectory = getReceivedFilesDirectory();
@@ -63,6 +87,12 @@ public class LocalFileHelper {
         return file;
     }
 
+    /**
+     * Extracts the filename from the given source file path.
+     *
+     * @param sourceFilePath The source file path.
+     * @return The filename.
+     */
     public static String getFilenameFromPath(String sourceFilePath) {
         // Create Path object for the source file
         Path sourcePath = Paths.get(sourceFilePath);
@@ -73,6 +103,12 @@ public class LocalFileHelper {
         return fileName;
     }
 
+    /**
+     * Copies a file to the shared folder.
+     *
+     * @param sourceFilePath The path of the source file.
+     * @return True if the file is copied successfully, false otherwise.
+     */
     public static boolean copyFileToSharedFolder(String sourceFilePath) {
         // Create Path object for the source file
         Path sourcePath = Paths.get(sourceFilePath);
@@ -101,6 +137,11 @@ public class LocalFileHelper {
         return false;
     }
 
+    /**
+     * Deletes a file from the shared folder.
+     *
+     * @param fileName The name of the file to be deleted.
+     */
     public static void deleteFileFromSharedFolder(String fileName) {
         // Construct the file path
         String filePath = sharedFilesDirectory + File.separator + fileName;
@@ -114,6 +155,9 @@ public class LocalFileHelper {
 
     }
 
+    /**
+     * Lists the shared files in the shared folder.
+     */
     public static void listSharedFilesInFolder() {
         File folder = new File(sharedFilesDirectory);
 

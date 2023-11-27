@@ -3,21 +3,33 @@ package Client.SocketThreads;
 import Client.Helpers.LocalFileHelper;
 
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
+import java.net.*;
 
+/**
+ * The SocketClientThread class represents a client thread that connects to a server,
+ * requests a file, and receives the file from the server.
+ */
 public class SocketClientThread extends Thread {
     private String fileName;
     private String ip;
     private int port;
 
+    /**
+     * Constructs a new SocketClientThread with the specified file name, IP address, and port.
+     *
+     * @param fileName The name of the file to request.
+     * @param ip       The IP address of the server.
+     * @param port     The port number of the server.
+     */
     public SocketClientThread(String fileName, String ip, int port) {
         this.fileName = fileName;
         this.ip = ip;
         this.port = port;
     }
 
+    /**
+     * Runs the client thread, connecting to the server, requesting a file, and receiving the file.
+     */
     @Override
     public void run() {
         try {
@@ -52,6 +64,14 @@ public class SocketClientThread extends Thread {
         }
     }
 
+    /**
+     * Receives a file from the server and saves it locally.
+     *
+     * @param fileName The name of the file to receive.
+     * @param reader   The DataInputStream for reading from the server.
+     * @return True if the file is received successfully, false otherwise.
+     * @throws IOException If an I/O error occurs while receiving the file.
+     */
     private boolean receiveFile(String fileName, DataInputStream reader) throws IOException {
         long length = reader.readLong();
         Boolean received = false;

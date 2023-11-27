@@ -10,6 +10,9 @@ import Client.SocketThreads.SocketServerThread;
 import java.net.InetAddress;
 import java.util.*;
 
+/**
+ * The FileShareClient class represents the main client application for a CORBA-based P2P file sharing system.
+ */
 public class FileShareClient {
 
     // Change it to the actual IP address of your CORBA file-sharing register server.
@@ -19,6 +22,11 @@ public class FileShareClient {
     private static FileShare fileShare;
     private static Scanner sc = new Scanner(System.in);
 
+    /**
+     * The main method of the FileShareClient application.
+     *
+     * @param args The command-line arguments (not used in this application).
+     */
     public static void main(String[] args) {
 
         System.out.println("Get this computer's IP address in your local network ...");
@@ -52,6 +60,12 @@ public class FileShareClient {
 
         }
     }
+
+    /**
+     * Performs the selected operation based on the user's choice.
+     *
+     * @param choice The user's choice.
+     */
     private static void operation(int choice) {
         switch (choice) {
             case 1:
@@ -71,6 +85,9 @@ public class FileShareClient {
         }
     }
 
+    /**
+     * Registers a file for sharing.
+     */
     private static void registerFile() {
         while (true) {
             try {
@@ -97,6 +114,9 @@ public class FileShareClient {
 
     }
 
+    /**
+     * Cancels sharing of a file.
+     */
     private static void cancelSharing() {
         while (true) {
             System.out.println("Below is the shared file list: ");
@@ -116,6 +136,9 @@ public class FileShareClient {
 
     }
 
+    /**
+     * Searches and requests a shared file from other clients.
+     */
     private static void searchAndRequestSharedFile() {
         while (true) {
             System.out.println("Please enter the file name you want to search:");
@@ -142,6 +165,12 @@ public class FileShareClient {
         }
     }
 
+    /**
+     * Requests a shared file from other clients based on the file ID.
+     *
+     * @param fileIds  The list of available file IDs.
+     * @param fileName The name of the file to request.
+     */
     private static void requestSharedFile(List<Integer> fileIds, String fileName) {
         while (true) {
             try {
@@ -175,6 +204,11 @@ public class FileShareClient {
         }
     }
 
+    /**
+     * Gets the IP address of the socket server for the client.
+     *
+     * @return The IP address of the socket server.
+     */
     private static String getSocketServerAddress() {
         List<InetAddress> inet4Addresses = LocalIPAddressHelper.getLocalIPAddresses();
 

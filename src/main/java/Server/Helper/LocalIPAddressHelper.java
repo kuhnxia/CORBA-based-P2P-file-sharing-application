@@ -1,15 +1,18 @@
 package Server.Helper;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Scanner;
+import java.net.*;
+import java.util.*;
 
+/**
+ * The LocalIPAddressHelper class provides methods for retrieving local IP addresses.
+ */
 public class LocalIPAddressHelper {
+
+    /**
+     * Gets a list of local IPv4 addresses.
+     *
+     * @return A List of InetAddress objects representing local IPv4 addresses.
+     */
     public static List<InetAddress> getLocalIPAddresses() {
         List<InetAddress> inet4Addresses = new ArrayList<>();
 

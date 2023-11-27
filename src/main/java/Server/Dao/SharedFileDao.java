@@ -6,8 +6,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The SharedFileDao class provides methods to interact with the SharedFiles table in the database.
+ */
 public class SharedFileDao {
 
+    /**
+     * Creates a new shared file entry in the database.
+     *
+     * @param sharedFile The SharedFile object representing the file to be registered.
+     * @return A message indicating the result of the operation.
+     */
     public String createSharedFile(SharedFile sharedFile) {
         String message = null;
         try (Connection connection = DatabaseConnector.getConnection();
@@ -42,6 +51,12 @@ public class SharedFileDao {
         return message;
     }
 
+    /**
+     * Retrieves a shared file from the database based on its ID.
+     *
+     * @param fileId The ID of the shared file.
+     * @return The SharedFile object representing the retrieved file, or null if not found.
+     */
     public SharedFile getSharedFileById(int fileId) {
         try (Connection connection = DatabaseConnector.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(
@@ -61,6 +76,11 @@ public class SharedFileDao {
         return null;
     }
 
+    /**
+     * Retrieves all shared files from the database.
+     *
+     * @return A list of SharedFile objects representing all shared files in the database.
+     */
     public List<SharedFile> getAllSharedFiles() {
         List<SharedFile> sharedFiles = new ArrayList<>();
 
@@ -79,23 +99,12 @@ public class SharedFileDao {
         return sharedFiles;
     }
 
-    public void updateSharedFile(SharedFile sharedFile) {
-        try (Connection connection = DatabaseConnector.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(
-                     "UPDATE SharedFiles SET file_name = ?, ip_address = ?, port = ? WHERE id = ?")) {
-
-            preparedStatement.setString(1, sharedFile.getFilename());
-            preparedStatement.setString(2, sharedFile.getIpAddress());
-            preparedStatement.setInt(3, sharedFile.getPort());
-            preparedStatement.setInt(4, sharedFile.getId());
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Deletes a shared file from the database based on its ID.
+     *
+     * @param fileId The ID of the shared file to be deleted.
+     * @return A message indicating the result of the operation.
+     */
     public String deleteSharedFile(int fileId) {
         String message = null;
         try (Connection connection = DatabaseConnector.getConnection();
@@ -113,6 +122,13 @@ public class SharedFileDao {
         return message;
     }
 
+    /**
+     * Maps a ResultSet to a SharedFile object.
+     *
+     * @param resultSet The ResultSet containing the shared file information.
+     * @return The SharedFile object representing the mapped file.
+     * @throws SQLException If a SQL exception occurs.
+     */
     private SharedFile mapResultSetToSharedFile(ResultSet resultSet) throws SQLException {
         SharedFile sharedFile = new SharedFile(
                 resultSet.getString("file_name"),

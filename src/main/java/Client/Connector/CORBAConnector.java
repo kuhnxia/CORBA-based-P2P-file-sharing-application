@@ -7,7 +7,16 @@ import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 
+/**
+ * The CORBAConnector class provides methods for connecting to a FileShare server using CORBA.
+ */
 public class CORBAConnector{
+    /**
+     * Retrieves a FileShare server instance based on the provided IP address.
+     *
+     * @param ip The IP address of the FileShare server.
+     * @return A FileShare object representing the server connection.
+     */
     public static FileShare getFileShareServer(String ip) {
         FileShare fileShare = null;
         try {
